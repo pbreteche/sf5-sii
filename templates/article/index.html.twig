@@ -1,0 +1,12 @@
+<article>
+    <h1>Liste des articles ({{ articles | length }})</h1>
+
+    <ul>
+        {% for article in articles %}
+            <li>{{ article.title }}</li>
+        {% else %}
+            <li>Pas d'article pour le moment</li>
+        {% endfor %}
+    </ul>
+
+</article>
