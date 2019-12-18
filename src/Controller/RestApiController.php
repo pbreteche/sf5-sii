@@ -21,7 +21,10 @@ class RestApiController extends AbstractController
     }
 
     /**
-     * @Route("/{name}", methods="GET")
+     * @Route("/{name}",
+     *     methods="GET",
+     *     requirements={"name":"[^/]+"},
+     *     defaults={"name":"tout le monde"})
      */
     public function hello(string $name)
     {
