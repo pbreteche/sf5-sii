@@ -1,3 +1,6 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
 <article>
     <h1>Liste des articles ({{ articles | length }})</h1>
 
@@ -8,5 +11,5 @@
             <li>Pas d'article pour le moment</li>
         {% endfor %}
     </ul>
-
 </article>
+{% endblock %}
