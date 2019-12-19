@@ -3,7 +3,10 @@
 {% block body %}
 <article>
     <h1>Liste des articles ({{ articles | length }})</h1>
-
+    <form action="{{ path('app_article_search') }}" method="get">
+        <input type="search" name="search-term">
+        <button>&#128269;</button>
+    </form>
     <ul>
         {% for article in articles %}
             <li>

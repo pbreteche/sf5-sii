@@ -39,6 +39,20 @@ class ArticleController extends AbstractController
     }
 
     /**
+     * @Route("/search")
+     */
+    public function search(Request $request, ArticleRepository $repository)
+    {
+        $term = $request->query->get('search-term');
+        if(!$term) {
+            return $this->json([]);
+        }
+
+        $articles = $repository->findByTitleContaining($term);
+        return $this->json($articles);
+    }
+
+    /**
      * @Route("/{id}", requirements={"id":"\d+"})
      * @Entity("article", expr="repository.findWithTag(id)")
      */

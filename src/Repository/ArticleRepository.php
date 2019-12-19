@@ -47,4 +47,13 @@ class ArticleRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findByTitleContaining(string $term)
+    {
+        return $this->getEntityManager()->createQuery(
+            'SELECT a.id, a.title FROM '.Article::class.' a 
+            WHERE a.title LIKE :pattern'
+        )->setParameter('pattern', '%'.$term.'%')
+            ->getResult();
+    }
 }
