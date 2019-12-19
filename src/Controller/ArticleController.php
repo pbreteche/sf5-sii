@@ -6,6 +6,7 @@ use App\Entity\Article;
 use App\Entity\Tag;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
@@ -27,20 +28,19 @@ class ArticleController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/tag/{id}", methods="GET")
-     */
     public function indexByTag(Tag $tag, ArticleRepository $repository)
     {
-        $articles = $repository->findWithTag($tag);
+        $articles = $repository->findByTag($tag);
 
-        return $this->render('article/index.html.twig', [
-            'articles' => $articles
+        return $this->render('article/index_by_tag.html.twig', [
+            'tag' => $tag,
+            'articles' => $articles,
         ]);
     }
 
     /**
      * @Route("/{id}", requirements={"id":"\d+"})
+     * @Entity("article", expr="repository.findWithTag(id)")
      */
     public function show(Article $article)
     {

@@ -20,27 +20,25 @@ class ArticleRepository extends ServiceEntityRepository
         parent::__construct($registry, Article::class);
     }
 
-    // /**
-    //  * @return Article[] Returns an array of Article objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    /**
+     * @return Article[]
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function findWithTag(int $id)
     {
         return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('a.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('a.id = :id')
+            ->setParameter('id', $id)
             ->getQuery()
-            ->getResult()
+            ->getSingleResult()
         ;
     }
-    */
 
     /**
      * @return Article[]
      */
-    public function findWithTag(Tag $tag)
+    public function findByTag(Tag $tag)
     {
         return $this->createQueryBuilder('a')
             ->join('a.tags', 't')
