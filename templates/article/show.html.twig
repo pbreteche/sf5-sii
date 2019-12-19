@@ -4,5 +4,10 @@
 <article>
     <h1>{{ article.title }}</h1>
     <div>{{ article.body }}</div>
+    <div>
+        {% for tag in article.tags %}
+            {{ tag.name }}{{ loop.last? : ',' }}
+        {% endfor %}
+    </div>
 </article>
 {% endblock %}
