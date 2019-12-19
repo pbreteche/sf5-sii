@@ -7,7 +7,7 @@ searchFormElement.addEventListener('submit', function(event){
             .then(response => response.json())
             .then(data => {
                 const listElements = data.reduce((accumulator, article) =>
-                        accumulator + `<li><a href="">${article.title}</a></li>`, '');
+                        accumulator + `<li><a href="${article.url}">${article.title}</a></li>`, '');
                 const resultElement = document.createElement('ul');
                 resultElement.innerHTML = listElements;
                 searchInputElement.after(resultElement)

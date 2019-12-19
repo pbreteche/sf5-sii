@@ -49,6 +49,11 @@ class ArticleController extends AbstractController
         }
 
         $articles = $repository->findByTitleContaining($term);
+
+        foreach($articles as &$article) {
+            $article['url'] = $this->generateUrl('app_article_show', ['id' => $article['id']]);
+        }
+
         return $this->json($articles);
     }
 
