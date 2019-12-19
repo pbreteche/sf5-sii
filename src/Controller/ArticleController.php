@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Entity\Tag;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,6 +21,18 @@ class ArticleController extends AbstractController
     public function index(ArticleRepository $repository)
     {
         $articles = $repository->findAll();
+
+        return $this->render('article/index.html.twig', [
+            'articles' => $articles
+        ]);
+    }
+
+    /**
+     * @Route("/tag/{id}", methods="GET")
+     */
+    public function indexByTag(Tag $tag, ArticleRepository $repository)
+    {
+        $articles = $repository->findWithTag($tag);
 
         return $this->render('article/index.html.twig', [
             'articles' => $articles
