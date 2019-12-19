@@ -6,7 +6,7 @@
 
     <ul>
         {% for article in articles %}
-            <li>{{ article.title }}</li>
+            <li><a href="{{ path('app_article_show', {'id': article.id}) }}">{{ article.title }}</a></li>
         {% else %}
             <li>Pas d'article pour le moment</li>
         {% endfor %}
