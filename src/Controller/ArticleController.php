@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Article;
 use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ArticleController extends AbstractController
@@ -33,11 +34,30 @@ class ArticleController extends AbstractController
     }
 
     /**
-     * @Route("/add")
+     * @Route("/add", methods={"GET", "POST"})
      */
-    public function create()
+    public function create(Request $request)
     {
+        $article = new Article();
+        $article->setCreatedAt(new \DateTimeImmutable());
+
+        $form = $this->createFormBuilder($article)
+            ->add('title')
+            ->add('body')
+            ->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($article);
+            $em->flush();
+
+            $this->addFlash('success', 'Votre article a bien été ajouté');
+            return $this->redirectToRoute('app_article_show', ['id' => $article->getId()]);
+        }
+
         return $this->render('article/create.html.twig', [
+            'article_form' => $form->createView()
         ]);
     }
 }
