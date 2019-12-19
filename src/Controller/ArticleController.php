@@ -60,4 +60,31 @@ class ArticleController extends AbstractController
             'article_form' => $form->createView()
         ]);
     }
+
+
+
+    /**
+     * @Route("/edit/{id}", methods={"GET", "POST"})
+     */
+    public function edit(Request $request, Article $article)
+    {
+        $form = $this->createFormBuilder($article)
+            ->add('title')
+            ->add('body')
+            ->getForm();
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($article);
+            $em->flush();
+
+            $this->addFlash('success', 'Votre article a bien été mis à jour');
+            return $this->redirectToRoute('app_article_show', ['id' => $article->getId()]);
+        }
+
+        return $this->render('article/edit.html.twig', [
+            'article_form' => $form->createView()
+        ]);
+    }
 }
