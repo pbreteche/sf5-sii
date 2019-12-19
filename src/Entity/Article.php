@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
@@ -17,6 +18,8 @@ class Article
     private $id;
 
     /**
+     * @Assert\NotBlank()
+     * @Assert\Regex(pattern="/[A-Z]{1}.{0,}/", message="Merci de commencer par une majuscule pour de vrai")
      * @ORM\Column(type="string", length=255)
      */
     private $title;
