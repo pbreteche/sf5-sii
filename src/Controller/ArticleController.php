@@ -3,8 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Article;
+use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -41,19 +44,12 @@ class ArticleController extends AbstractController
         $article = new Article();
         $article->setCreatedAt(new \DateTimeImmutable());
 
-        $form = $this->createFormBuilder($article)
-            ->add('title')
-            ->add('body')
-            ->getForm();
+        $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($article);
-            $em->flush();
-
-            $this->addFlash('success', 'Votre article a bien été ajouté');
-            return $this->redirectToRoute('app_article_show', ['id' => $article->getId()]);
+            return $this->handleForm($article,
+                'Votre article a bien été ajouté');
         }
 
         return $this->render('article/create.html.twig', [
@@ -61,30 +57,29 @@ class ArticleController extends AbstractController
         ]);
     }
 
-
-
     /**
      * @Route("/edit/{id}", methods={"GET", "POST"})
      */
     public function edit(Request $request, Article $article)
     {
-        $form = $this->createFormBuilder($article)
-            ->add('title')
-            ->add('body')
-            ->getForm();
+        $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($article);
-            $em->flush();
-
-            $this->addFlash('success', 'Votre article a bien été mis à jour');
-            return $this->redirectToRoute('app_article_show', ['id' => $article->getId()]);
+            return $this->handleForm($article,
+                'Votre article a bien été mis à jour');
         }
 
         return $this->render('article/edit.html.twig', [
             'article_form' => $form->createView()
         ]);
+    }
+
+    private function handleForm(Article $article, string $successMessage) {
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($article);
+        $em->flush();
+
+        $this->addFlash('success', $successMessage);
+        return $this->redirectToRoute('app_article_show', ['id' => $article->getId()]);
     }
 }
