@@ -31,4 +31,13 @@ class ArticleController extends AbstractController
             'article' => $article
         ]);
     }
+
+    /**
+     * @Route("/add")
+     */
+    public function create()
+    {
+        return $this->render('article/create.html.twig', [
+        ]);
+    }
 }
