@@ -110,7 +110,9 @@ class ArticleController extends AbstractController
     }
 
     private function handleForm(Article $article, string $successMessage) {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $em = $this->getDoctrine()->getManager();
+        $article->setAuthor($this->getUser());
         $em->persist($article);
         $em->flush();
 
