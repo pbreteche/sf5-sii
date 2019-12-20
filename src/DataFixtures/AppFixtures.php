@@ -4,13 +4,31 @@ namespace App\DataFixtures;
 
 use App\Entity\Article;
 use App\Entity\Tag;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class AppFixtures extends Fixture
 {
+
+    /**
+     * @var UserPasswordEncoderInterface
+     */
+    private $encoder;
+
+    public function __construct(UserPasswordEncoderInterface $encoder)
+    {
+        $this->encoder = $encoder;
+    }
+
     public function load(ObjectManager $manager)
     {
+        $user = new User();
+        $user->setEmail('admin@site.fr');
+        $user->setPassword($this->encoder->encodePassword($user, 'coucou'));
+        $user->setRoles(['ROLE_ADMIN']);
+
         $tag1 = (new Tag())->setName('PHP');
         $tag2 = (new Tag())->setName('Symfony');
         $tag3 = (new Tag())->setName('MySql');
@@ -33,6 +51,11 @@ class AppFixtures extends Fixture
             ->setCreatedAt(new \DateTimeImmutable('2019-10-26'))
             ->addTag($tag3);
 
+        $article1->setAuthor($user);
+        $article2->setAuthor($user);
+        $article3->setAuthor($user);
+
+        $manager->persist($user);
         $manager->persist($tag1);
         $manager->persist($tag2);
         $manager->persist($tag3);

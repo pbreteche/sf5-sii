@@ -8,6 +8,7 @@ use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use App\Service\ArticleSearcher;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
@@ -64,6 +65,7 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/add", methods={"GET", "POST"})
+     * @IsGranted("ROLE_ADMIN")
      */
     public function create(Request $request)
     {

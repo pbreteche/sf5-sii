@@ -42,6 +42,12 @@ class Article
      */
     private $tags;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
+
     public function __construct()
     {
         $this->tags = new ArrayCollection();
@@ -122,5 +128,17 @@ class Article
         if(!$this->createdAt) {
             $this->createdAt = new \DateTimeImmutable();
         }
+    }
+
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?User $author): self
+    {
+        $this->author = $author;
+
+        return $this;
     }
 }

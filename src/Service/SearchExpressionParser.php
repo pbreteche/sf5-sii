@@ -24,7 +24,6 @@ class SearchExpressionParser
             }
 
             if (preg_match('/(?<label>[^:]+):(?<term>[^:]+)/', $criteriaString, $matches)) {
-                dump($matches);
                 if (!in_array($matches['label'], self::LABELS)) {
                     throw new BadRequestHttpException('Critère '.$matches['label'].' inconnu');
                 }
