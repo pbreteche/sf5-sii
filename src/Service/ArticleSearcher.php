@@ -39,7 +39,7 @@ class ArticleSearcher
             return [];
         }
 
-        $articles = $this->repository->findByTitleContaining($criteria[0]);
+        $articles = $this->repository->findByTitleContaining($criteria);
 
         foreach($articles as &$article) {
             $article['url'] = $this->router->generate('app_article_show', ['id' => $article['id']]);

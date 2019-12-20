@@ -48,12 +48,17 @@ class ArticleRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-    public function findByTitleContaining(string $term)
+    public function findByTitleContaining(array $terms)
     {
-        return $this->getEntityManager()->createQuery(
-            'SELECT a.id, a.title FROM '.Article::class.' a 
-            WHERE a.title LIKE :pattern'
-        )->setParameter('pattern', '%'.$term.'%')
-            ->getResult();
+        $qb = $this->createQueryBuilder('a')
+            ->select('a.id, a.title');
+        $paramBaseName = ':pattern_';
+        $paramCount = 0;
+        foreach($terms as $term) {
+            $paramId = $paramBaseName.++$paramCount;
+            $qb->orWhere('a.title LIKE '.$paramId)
+                ->setParameter($paramId, '%'.$term.'%');
+        }
+        return $qb->getQuery()->getResult();
     }
 }
