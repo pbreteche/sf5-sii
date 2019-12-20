@@ -93,6 +93,8 @@ class ArticleController extends AbstractController
 
     /**
      * @Route("/edit/{id}", methods={"GET", "POST"})
+     * @IsGranted("ROLE_AUTHOR")
+     * @IsGranted("ARTICLE_EDIT", subject="article")
      */
     public function edit(Request $request, Article $article)
     {
