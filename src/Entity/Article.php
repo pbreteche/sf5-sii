@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Article
 {
@@ -111,5 +112,15 @@ class Article
         }
 
         return $this;
+    }
+
+    /**
+     * @ORM\PrePersist()
+     */
+    public function defaultCreatedAt()
+    {
+        if(!$this->createdAt) {
+            $this->createdAt = new \DateTimeImmutable();
+        }
     }
 }
