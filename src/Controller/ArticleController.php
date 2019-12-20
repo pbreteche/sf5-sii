@@ -14,6 +14,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 class ArticleController extends AbstractController
 {
@@ -69,6 +70,11 @@ class ArticleController extends AbstractController
      */
     public function create(Request $request)
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        if($this->getUser() instanceof UserInterface) {
+            // ma propre logique
+            //throw $this->createAccessDeniedException();
+        }
         $article = new Article();
         $article->setCreatedAt(new \DateTimeImmutable());
 

@@ -5,4 +5,7 @@
 
     {{ include('article/_form.html.twig', {submit_label: 'Ajouter'}) }}
 
+    {% if is_granted('ROLE_ADMIN') %}
+    <p>Vous êtes Admin</p>
+    {% endif %}
 {% endblock %}
