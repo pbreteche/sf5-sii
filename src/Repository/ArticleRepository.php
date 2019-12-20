@@ -56,8 +56,10 @@ class ArticleRepository extends ServiceEntityRepository
         $paramCount = 0;
         foreach($terms as $term) {
             $paramId = $paramBaseName.++$paramCount;
-            $qb->orWhere('a.title LIKE '.$paramId)
-                ->setParameter($paramId, '%'.$term.'%');
+            if ($term['label'] == 'title') {
+                $qb->orWhere('a.title LIKE '.$paramId)
+                    ->setParameter($paramId, '%'.$term['term'].'%');
+            }
         }
         return $qb->getQuery()->getResult();
     }
