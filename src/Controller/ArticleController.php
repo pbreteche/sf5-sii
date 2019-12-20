@@ -6,6 +6,7 @@ use App\Entity\Article;
 use App\Entity\Tag;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
+use App\Service\ArticleSearcher;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Form;
@@ -41,18 +42,11 @@ class ArticleController extends AbstractController
     /**
      * @Route("/search")
      */
-    public function search(Request $request, ArticleRepository $repository)
+    public function search(Request $request, ArticleSearcher $searcher)
     {
         $term = $request->query->get('search-term');
-        if(!$term) {
-            return $this->json([]);
-        }
 
-        $articles = $repository->findByTitleContaining($term);
-
-        foreach($articles as &$article) {
-            $article['url'] = $this->generateUrl('app_article_show', ['id' => $article['id']]);
-        }
+        $articles = $searcher->search($term);
 
         return $this->json($articles);
     }
